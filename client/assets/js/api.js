@@ -23,18 +23,43 @@ function listarTarefas(filtro){
     });
 }
 
+function listarTarefaPorId(id){
+
+    return new Promise(function(resolve, reject){
+        let url = 'http://localhost:3010/api/v1/tarefas/' + id;
+
+        let requisicao = new XMLHttpRequest();
+
+        requisicao.onreadystatechange = function(){
+            if(this.readyState == 4){
+                if (this.status == 200) {
+                    resolve(JSON.parse(this.response));
+                } else if(this.status == 400){
+                    resolve(null);
+                } else {
+                    reject("Erro ao conectar ao servidor");                
+                }
+            }
+        }
+
+        requisicao.open("GET", url, true);
+        requisicao.send();
+
+    });
+}
+
 function inserirTarefa(tarefa){
 
     return new Promise(function(resolve, reject){
 
-        let url = 'http://localhost:3010/api/v1/tarefas/f/';
+        let url = 'http://localhost:3010/api/v1/tarefas/';
         let requisicao = new XMLHttpRequest();
 
         requisicao.onreadystatechange = function(){
             if (this.readyState == 4) {
                 if(this.status == 201){
                     resolve(JSON.parse(this.responseText));
-                } else {
+            } else {
                     reject('Erro ao enviar dados ao servidor');
                 }
             }
